@@ -15,6 +15,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@fontsource/roboto-mono": "^4.5.8",
+    "@fontsource/urbanist": "^4.5.17",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.8.0",
     "apollo-server-micro": "^3.11.1",

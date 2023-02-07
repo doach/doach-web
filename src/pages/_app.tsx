@@ -3,12 +3,13 @@ import { AppProps } from "next/app";
 import { FC } from "react";
 
 import { ApolloProvider } from "@apollo/client";
-import "@fontsource/roboto-mono";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import NextNProgress from "../components/layout/NextNProgress";
 import { client } from "../graphql/apollo-client";
 import theme from "../theme/theme";
+
+import "@fontsource/urbanist";
 
 export type CustomPageProps = {
   hideHeader?: boolean;

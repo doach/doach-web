@@ -1,4 +1,4 @@
 export const fonts = {
-  body: "Roboto Mono",
-  mono: `'Melo', monospace`,
+  body: "Urbanist",
+  mono: `'Urbanist', sans-serif`,
 };

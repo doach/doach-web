@@ -1129,6 +1129,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/roboto-mono/-/roboto-mono-4.5.8.tgz#f3a48195528b10e154c98365671de14e27605bdb"
   integrity sha512-AW44UkbQD0w1CT5mzDbsvhGZ6/bb0YmZzoELj6Sx8vcVEzcbYGUdt2Dtl5zqlOuYMWQFY1mniwWyVv+Bm/lVxw==
 
+"@fontsource/urbanist@^4.5.17":
+  version "4.5.17"
+  resolved "https://registry.yarnpkg.com/@fontsource/urbanist/-/urbanist-4.5.17.tgz#ac3c99e4c54a12d8f9220a12c9aedfc295ff5cab"
+  integrity sha512-zE3a23W/l038Ty7btpUC4mKoD7d3c4CqOkX89agNC/nUGctjalA7FlWvnQAbzP65ZmWc20aBueGMeCQmfJQ+cA==
+
 "@graphql-tools/merge@8.3.1":
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-8.3.1.tgz#06121942ad28982a14635dbc87b5d488a041d722"
