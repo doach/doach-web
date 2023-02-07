@@ -4,7 +4,7 @@ import Cors from "micro-cors";
 import { PageConfig } from "next";
 import { getSession } from "next-auth/react";
 import resolvers from "../../graphql/resolvers";
-import typeDefs from "../../graphql/typeDefs";
+import typeDefs from "../../graphql/typedefs";
 import prisma from "../../lib/prisma";
 import { GraphQLContext } from "../../util/types";
 
