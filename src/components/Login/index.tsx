@@ -35,10 +35,6 @@ type LoginProps = {
   prevUrl?: string;
 };
 
-/**
- * Renders a Login Form
- * @return {ReactElement}
- */
 export default function Login({ prevUrl }: LoginProps): ReactElement {
   // Hooks
   const [showPassword, setShowPassword] = useState(false);
@@ -103,7 +99,7 @@ export default function Login({ prevUrl }: LoginProps): ReactElement {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Flex flexDir={"column"} justifyContent={"space-between"} height={"100vH"} py={5} px={2}>
+      <Flex flexDir={"column"} justifyContent={"space-between"} height={"100vH"} py={8} px={2}>
         <Box>
           {prevUrl && (
             <IconButton
