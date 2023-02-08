@@ -1,14 +1,18 @@
 import { Container } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import Layout from "../components/layout/Layout";
-import Login from "../components/Login";
+import CreateAccountWithEmail from "../../components/CreateAccount/CreateAccountWithEmail";
+import Layout from "../../components/layout/Layout";
 
-const LoginPage = () => {
+type LoginPageProps = {
+  prevUrl?: string;
+};
+
+const CreateAccountPage = ({ prevUrl }: LoginPageProps) => {
   return (
     <Layout title="Login">
       <Container maxW={"xl"}>
-        <Login />
+        <CreateAccountWithEmail />
       </Container>
     </Layout>
   );
@@ -28,4 +32,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     props: {},
   };
 };
-export default LoginPage;
+export default CreateAccountPage;

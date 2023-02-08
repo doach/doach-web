@@ -28,22 +28,27 @@ export default function Welcome(): ReactElement {
           size={"lg"}
           color={"#FF886B"}
           mt={10}
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/login?prev=home")}
         >
           Sign in
         </Button>
         <HStack mt={5}>
           <Button leftIcon={<FaGoogle />} w={"full"} borderRadius={"full"} size={"lg"}>
             Google
-          </Button>{" "}
+          </Button>
           <Button leftIcon={<FaFacebookF />} w={"full"} borderRadius={"full"} size={"lg"}>
-            Sign in
+            Facebook
           </Button>
         </HStack>
         <Center mt={5}>
           <Text color="white" whiteSpace={"nowrap"}>
             Join with us.{" "}
-            <Link color="#FF513A" whiteSpace={"nowrap"}>
+            <Link
+              fontWeight={"bold"}
+              color={["#FF513A", "white"]}
+              whiteSpace={"nowrap"}
+              onClick={() => router.push("/create-account?prev=home")}
+            >
               Create Account
             </Link>
           </Text>

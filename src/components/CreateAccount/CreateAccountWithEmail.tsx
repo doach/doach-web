@@ -1,41 +1,29 @@
-import { ReactElement, useState } from "react";
-import { useForm } from "react-hook-form";
-import { ArrowBackIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
-  Checkbox,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
-  HStack,
-  IconButton,
   Input,
-  InputGroup,
-  InputRightElement,
-  Link,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FaFacebookF, FaGoogle } from "react-icons/fa";
+import { ReactElement } from "react";
+import { useForm } from "react-hook-form";
 import { toastPosition } from "../../config/constants";
 import ReturnButton from "../layout/ReturnButton";
 
 type IFormInput = {
   email: string;
-  password: string;
 };
 
-export default function Login(): ReactElement {
+export default function CreateAccountWithEmail(): ReactElement {
   // Hooks
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
   const {
     handleSubmit,
@@ -72,11 +60,10 @@ export default function Login(): ReactElement {
    */
   async function signInWithEmailAndPassword(data: IFormInput) {
     try {
-      const { email, password } = data;
+      const { email } = data;
       const result = (await signIn("credentials", {
         redirect: false,
         email,
-        password,
       })) as unknown as SignInResponse;
 
       if (result.error) {
@@ -102,10 +89,10 @@ export default function Login(): ReactElement {
         <Box>
           {query.prev && <ReturnButton prevUrl={query.prev as string} />}
           <Heading color={"gray.400"} fontSize={"lg"} mt={12}>
-            Sign In To Account
+            Create Account
           </Heading>
           <Heading fontSize={"4xl"} mt={2} mr={10}>
-            Input Your Account
+            What's Your Email Address?
           </Heading>
 
           <FormControl isInvalid={Boolean(errors.email)} isRequired mt={14}>
@@ -126,45 +113,6 @@ export default function Login(): ReactElement {
             />
             <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
           </FormControl>
-
-          <FormControl isInvalid={Boolean(errors.password)} isRequired mt={5}>
-            <Flex justifyContent="space-between">
-              <FormLabel id="password" htmlFor="password">
-                Password
-              </FormLabel>
-            </Flex>
-            <InputGroup>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                {...register("password", {
-                  required: "This is required",
-                  minLength: {
-                    value: 6,
-                    message: "Minimum length should be 4",
-                  },
-                })}
-              />
-              <InputRightElement>
-                <IconButton
-                  variant="ghost"
-                  onClick={() => setShowPassword((value) => !value)}
-                  aria-label="Show password"
-                  icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
-            <Flex justifyContent={"space-between"} mt={5}>
-              <FormControl>
-                <Checkbox color="gray.400">Remember me</Checkbox>
-              </FormControl>
-              <Link color="gray.400" whiteSpace={"nowrap"}>
-                Forgot Password?
-              </Link>
-            </Flex>
-          </FormControl>
         </Box>
         <Box>
           <Button
@@ -176,40 +124,8 @@ export default function Login(): ReactElement {
             isLoading={isSubmitting}
             type="submit"
           >
-            Sign In
+            Next
           </Button>
-          <HStack mt={5}>
-            <Button
-              variant={"outline"}
-              leftIcon={<FaGoogle />}
-              w={"full"}
-              borderRadius={"full"}
-              size={"lg"}
-            >
-              Google
-            </Button>
-            <Button
-              variant={"outline"}
-              leftIcon={<FaFacebookF />}
-              w={"full"}
-              borderRadius={"full"}
-              size={"lg"}
-            >
-              Facebook
-            </Button>
-          </HStack>
-          <Center mt={5}>
-            <Text color="gray.400" whiteSpace={"nowrap"}>
-              Join with us.{" "}
-              <Link
-                color="#FF513A"
-                whiteSpace={"nowrap"}
-                onClick={() => router.push(`/create-account?prev=login?prev=${query.prev}`)}
-              >
-                Create Account
-              </Link>
-            </Text>
-          </Center>
         </Box>
       </Flex>
     </form>
