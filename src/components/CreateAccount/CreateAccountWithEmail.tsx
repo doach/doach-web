@@ -4,6 +4,7 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -61,11 +62,12 @@ export default function CreateAccountWithEmail(): ReactElement {
   async function signInWithEmailAndPassword(data: IFormInput) {
     try {
       const { email } = data;
-      const result = (await signIn("credentials", {
+      const result = (await signIn("email", {
         redirect: false,
         email,
       })) as unknown as SignInResponse;
 
+      console.log(result);
       if (result.error) {
         toast({
           title: "Failure",
@@ -111,6 +113,9 @@ export default function CreateAccountWithEmail(): ReactElement {
                 },
               })}
             />
+            <FormHelperText>
+              We'll send you a "magic link" that can be used to sign in.
+            </FormHelperText>
             <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
           </FormControl>
         </Box>
