@@ -1,101 +1,103 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Button, Center, Flex, HStack, Text } from "@chakra-ui/react";
-import { Step, Steps, useSteps } from "chakra-ui-steps";
-import NextLink from "next/link";
-import UserOperations from "../../graphql/operations/users";
-import { PopulatedUserData, UpdateUserData } from "../../util/types";
-import SkeletonLoader from "../common/SkeletonLoader";
-import OnboardingSteps from "./OnboardingSteps";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import { AxiosError } from "axios";
+import { useRouter } from "next/router";
+import { ReactElement } from "react";
+import { useForm } from "react-hook-form";
+import { toastPosition } from "../../config/constants";
+import ReturnButton from "../layout/ReturnButton";
 
-const steps = ["expertise", "skills", "generals"];
-
-export type IOnboardingFormInput = {
-  expertise?: string;
-  skills?: string[];
-  name?: string;
-  location?: string;
-  email?: string;
-  bio?: string;
+type IFormInput = {
+  name: string;
 };
 
-const Onboarding: React.FC = () => {
-  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-    initialStep: 0,
-  });
+export default function Onboarding(): ReactElement {
+  // Hooks
+  const router = useRouter();
+  const toast = useToast();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm<IFormInput>();
 
-  const { data, loading, error } = useQuery<PopulatedUserData>(
-    UserOperations.Queries.populatedUser
-  );
+  const { query } = router;
 
-  const [updateUser, { loading: updateUserLoading }] = useMutation<UpdateUserData>(
-    UserOperations.Mutations.updateUser
-  );
-
-  const onSubmit = async (values: IOnboardingFormInput) => {
-    if (activeStep < steps.length - 1) {
-      nextStep();
-    } else {
-      try {
-        const { expertise, skills, name, email, bio, location } = values;
-        const extendedSkills = skills?.map((skill) => ({ name: skill, weight: 0 }));
-        await updateUser({
-          variables: {
-            name,
-            expertise,
-            email,
-            bio,
-            location,
-            skills: extendedSkills,
-          },
-        });
-      } catch (error: any) {
-        console.log(error);
-      }
+  /**
+   * Form submit
+   * @param {IFormInput} values
+   */
+  async function onSubmit(values: IFormInput) {
+    try {
+    } catch (err) {
+      const error = err as AxiosError;
+      toast({
+        title: "Failure",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: toastPosition,
+      });
     }
-  };
+  }
 
   return (
-    <>
-      {loading && (
-        <Flex flexDir={"column"} mt={100}>
-          <SkeletonLoader count={3} height={20} width={"full"} spacing={5} />
-        </Flex>
-      )}
-      {error && (
-        <Flex flexDir={"column"} mt={200} alignItems={"center"}>
-          <Text textAlign={"center"} maxW={"xl"}>
-            Ups, something went wrong. Please try it again or write me a message.
-          </Text>
-          <HStack justify={"center"} mt={5}>
-            <NextLink href={"/chat?participants=andreassiedler"}>
-              <Button size={"xl"}>Message</Button>
-            </NextLink>
-            <Button size={"xl"} colorScheme={"brand"}>
-              Reload
-            </Button>
-          </HStack>
-        </Flex>
-      )}
-      {data && (
-        <>
-          <Center mt={10} mb={20}>
-            <Steps activeStep={activeStep} maxWidth={400} colorScheme="brand" responsive={false}>
-              <Step key={"expertise"} />
-              <Step key={"languages"} />
-              <Step key={"general"} />
-            </Steps>
-          </Center>
-          <OnboardingSteps
-            activeStep={activeStep}
-            populatedUser={data.populatedUser}
-            isLoading={updateUserLoading}
-            onNextStep={nextStep}
-            onPrevStep={prevStep}
-            onSubmit={onSubmit}
-          />
-        </>
-      )}
-    </>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Flex flexDir={"column"} justifyContent={"space-between"} height={"100vH"} py={8} px={2}>
+        <Box>
+          {query.prev && <ReturnButton prevUrl={query.prev as string} />}
+          <Heading color={"gray.400"} fontSize={"lg"} mt={12}>
+            Welcome
+          </Heading>
+          <Heading fontSize={"4xl"} mt={2} mr={10}>
+            How shall we call you?
+          </Heading>
+
+          <FormControl isInvalid={Boolean(errors.name)} isRequired mt={14}>
+            <FormLabel id="name" htmlFor="name">
+              First name
+            </FormLabel>
+            <Input
+              id="name"
+              type="text"
+              placeholder="First name"
+              {...register("name", {
+                required: "This is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
+            />
+            <FormHelperText>We'll never share your name.</FormHelperText>
+            <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+          </FormControl>
+        </Box>
+        <Box>
+          <Button
+            w={"full"}
+            bgColor={"#FF513A"}
+            color={"white"}
+            borderRadius={16}
+            size={"xl"}
+            isLoading={isSubmitting}
+            type="submit"
+          >
+            Next
+          </Button>
+        </Box>
+      </Flex>
+    </form>
   );
-};
-export default Onboarding;
+}

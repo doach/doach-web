@@ -2,11 +2,14 @@ import { Container } from "@chakra-ui/react";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Layout from "../components/layout/Layout";
+import Onboarding from "../components/Onboarding";
 
 const OnboardingPage = () => {
   return (
     <Layout title="Login">
-      <Container maxW={"xl"}>Onboarding</Container>
+      <Container maxW={"xl"}>
+        <Onboarding />
+      </Container>
     </Layout>
   );
 };
