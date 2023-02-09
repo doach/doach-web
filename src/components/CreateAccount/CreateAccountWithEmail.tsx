@@ -34,14 +34,13 @@ export default function CreateAccountWithEmail(): ReactElement {
 
   const { query } = router;
 
-  // Logic
   /**
    * Form submit
    * @param {IFormInput} values
    */
   async function onSubmit(values: IFormInput) {
     try {
-      await signInWithEmailAndPassword(values);
+      await signInWithEmail(values);
     } catch (err) {
       const error = err as AxiosError;
       toast({
@@ -55,11 +54,11 @@ export default function CreateAccountWithEmail(): ReactElement {
     }
   }
   /**
-   * Signin with email and password function
+   * Signin with email a
    * @param {IFormInput} data
    * @return {Promise<CognitoUser>}
    */
-  async function signInWithEmailAndPassword(data: IFormInput) {
+  async function signInWithEmail(data: IFormInput) {
     try {
       const { email } = data;
       const result = (await signIn("email", {
@@ -67,7 +66,6 @@ export default function CreateAccountWithEmail(): ReactElement {
         email,
       })) as unknown as SignInResponse;
 
-      console.log(result);
       if (result.error) {
         toast({
           title: "Failure",
@@ -78,7 +76,7 @@ export default function CreateAccountWithEmail(): ReactElement {
           position: toastPosition,
         });
       } else {
-        router.push("/room");
+        router.push(`/create-account/success?prec${query.prev}`);
       }
     } catch (error) {
       throw error;
