@@ -1,21 +1,15 @@
-import { ReactElement, useState } from "react";
-import { useForm } from "react-hook-form";
-import { ArrowBackIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Center,
-  Checkbox,
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   HStack,
-  IconButton,
   Input,
-  InputGroup,
-  InputRightElement,
   Link,
   Text,
   useToast,
@@ -23,19 +17,18 @@ import {
 import { AxiosError } from "axios";
 import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/router";
+import { ReactElement } from "react";
+import { useForm } from "react-hook-form";
 import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import { toastPosition } from "../../config/constants";
 import ReturnButton from "../layout/ReturnButton";
 
 type IFormInput = {
   email: string;
-  password: string;
 };
 
 export default function Login(): ReactElement {
-  // Hooks
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
   const {
     handleSubmit,
@@ -45,14 +38,13 @@ export default function Login(): ReactElement {
 
   const { query } = router;
 
-  // Logic
   /**
    * Form submit
    * @param {IFormInput} values
    */
   async function onSubmit(values: IFormInput) {
     try {
-      await signInWithEmailAndPassword(values);
+      await signInWithEmail(values);
     } catch (err) {
       const error = err as AxiosError;
       toast({
@@ -66,17 +58,16 @@ export default function Login(): ReactElement {
     }
   }
   /**
-   * Signin with email and password function
+   * Signin with email
    * @param {IFormInput} data
    * @return {Promise<CognitoUser>}
    */
-  async function signInWithEmailAndPassword(data: IFormInput) {
+  async function signInWithEmail(data: IFormInput) {
     try {
-      const { email, password } = data;
-      const result = (await signIn("credentials", {
+      const { email } = data;
+      const result = (await signIn("email", {
         redirect: false,
         email,
-        password,
       })) as unknown as SignInResponse;
 
       if (result.error) {
@@ -89,7 +80,7 @@ export default function Login(): ReactElement {
           position: toastPosition,
         });
       } else {
-        router.push("/room");
+        router.push(`/create-account/success?prec${query.prev}`);
       }
     } catch (error) {
       throw error;
@@ -124,46 +115,10 @@ export default function Login(): ReactElement {
                 },
               })}
             />
+            <FormHelperText>
+              We'll send you a "magic link" that can be used to sign in.
+            </FormHelperText>
             <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={Boolean(errors.password)} isRequired mt={5}>
-            <Flex justifyContent="space-between">
-              <FormLabel id="password" htmlFor="password">
-                Password
-              </FormLabel>
-            </Flex>
-            <InputGroup>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                {...register("password", {
-                  required: "This is required",
-                  minLength: {
-                    value: 6,
-                    message: "Minimum length should be 4",
-                  },
-                })}
-              />
-              <InputRightElement>
-                <IconButton
-                  variant="ghost"
-                  onClick={() => setShowPassword((value) => !value)}
-                  aria-label="Show password"
-                  icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
-            <Flex justifyContent={"space-between"} mt={5}>
-              <FormControl>
-                <Checkbox color="gray.400">Remember me</Checkbox>
-              </FormControl>
-              <Link color="gray.400" whiteSpace={"nowrap"}>
-                Forgot Password?
-              </Link>
-            </Flex>
           </FormControl>
         </Box>
         <Box>
