@@ -10,7 +10,7 @@ export default function Welcome(): ReactElement {
     <Flex height={"100vH"} alignItems={"center"} justifyContent={"center"} py={8} px={5}>
       <Image
         overflow={"hidden"}
-        w={[400, 1000]}
+        w={[400, 700]}
         src={"/svg/ellipse-750.svg"}
         position={"absolute"}
         transform={"rotate(270deg)"}
